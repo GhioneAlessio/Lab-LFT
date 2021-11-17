@@ -1,5 +1,5 @@
 
-////progetto ghione && frattarola
+//progetto ghione && frattarola
 import java.util.Scanner;
 
 public class Es1_8 {
