@@ -1,4 +1,5 @@
-//mi sono rotto il cazzo, incompleto
+
+////progetto ghione && frattarola
 import java.util.Scanner;
 
 public class Es1_8 {
@@ -7,80 +8,85 @@ public class Es1_8 {
         System.out.println("Inserisci numero: ");
         String sr = scanner.nextLine();
         scanner.close();
-        String state = "-1";
-        for(int i = 0; state != "-1" && i < sr.length(); i++){
-            switch(state){ 
-                case "0":
-                    if(0 <= sr.charAt(i) && sr.charAt(i) <= 9){
-                        state = "0";
-                        break;
-                    }
-                    else if(sr.charAt(i)== '.'){
-                        state = "punto";
-                    }
-                    else if(sr.charAt(i) == '+' || sr.charAt(i) == '-'){
-                        state = "segno";
-                        break;
-                    }                             
-                    else 
-                        state = "-1";
-                case "num": 
-                    if(0 <= sr.charAt(i) && sr.charAt(i) <= 9){
-                        state = "num";
-                        break;
-                    }  
-                    else if(sr.charAt(i) == '.'){
-                        state = "punto";
-                        break;
-                    }
-                    else if(sr.charAt(i) == 'e'){
-                        state = "esp";
-                        break;
-                    }
-                    else state = "-1";
+        int state = 0;
+        for (int i = 0; state != -1 && i < sr.length(); i++) {
+            char ch = sr.charAt(i);
+            switch (state) {
+            case 0:
+                if (Character.isDigit(ch)) {
+                    state = 1;
                     break;
-                case "punto": 
-                    if(0 <= sr.charAt(i) && sr.charAt(i) <= 9){
-                        state = "NdP";
-                        break;
-                    }
-                    else
-                        state = "-1";
-                        break;     
-                case "NdP":
-                    if(0 <= sr.charAt(i) && sr.charAt(i) <= 9){
-                        state = "NdPe";
-                        break;
-                    }
-                    else state = "-1";
+                } else if (sr.charAt(i) == '.') {
+                    state = 2;
+                } else if (sr.charAt(i) == '+' || sr.charAt(i) == '-') {
+                    state = 3;
                     break;
-                case "NdPe":
-                    if(0 <= sr.charAt(i) && sr.charAt(i) <= 9){
-                        state = "NdPe";
-                        break;
-                    }
-                    else if(sr.charAt(i) == 'e'){
-                        state = "esp";
-                        break;
-                    }
-                    else state = "-1"; 
-                case "segno":
-                    if(0 <= sr.charAt(i) && sr.charAt(i) <= 9){
-                        state = "num";
-                        break;
-                    }
-                    else if(sr.charAt(i) == '.'){
-                        state = "punto";
-                        break;
-                    }
-                    else 
-                        state = "-1"; 
+                } else
+                    state = -1;
                     break;
-                case "esp":
-                  
+            case 1:
+                if (Character.isDigit(ch))
+                    break;
+                else if (ch == '.') {
+                    state = 2;
+                    break;
+                } else if (ch == 'e') {
+                    state = 4;
+                    break;
+                } else
+                    state = -1;
+                break;
+            case 2:
+                if (Character.isDigit(ch))
+                    state = 7;
+                else
+                    state = -1;
+                break;
+            case 3:
+                if (Character.isDigit(ch)) {
+                    state = 1;
+                    break;
+                } else if (ch == '.') {
+                    state = 2;
+                    break;
+                } else
+                    state = -1;
+                break;
+            case 4:
+                if (ch == '+' || ch == '-') {
+                    state = 5;
+                    break;
+                } else if (Character.isDigit(ch)) {
+                    state = 6;
+                    break;
+                }
+                else state = -1;
+                break;
+            case 5:
+                if(Character.isDigit(ch)){
+                    state = 6;
+                    break;
+                }else 
+                state =-1; break;
+
+            case 6: 
+                if(Character.isDigit(ch))
+                break;
+                else state = -1;
+                break;
+            case 7: 
+            if(Character.isDigit(ch))
+                break;
+            else if(ch == 'e'){
+                state = 4;
+                break;}
+            else 
+            state = -1;
+            break;
             }
+            
         }
 
-        System.out.printf("Stringa accetata: %s", (state == "0" || state == "1")? "Si" : "No");
-    }    
+        System.out.printf("Stringa accetata: %s", (state == 1 || state == 6 || state == 7) ? "Si\n" : "No\n");
+    }
 }
