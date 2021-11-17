@@ -59,6 +59,9 @@ public class Es1_8 {
                 } else if (Character.isDigit(ch)) {
                     state = 6;
                     break;
+                }else if(ch == '.'){
+                    state = 8;
+                    break;
                 }
                 else state = -1;
                 break;
@@ -72,21 +75,39 @@ public class Es1_8 {
             case 6: 
                 if(Character.isDigit(ch))
                 break;
+                else if(ch == '.'){
+                state = 8;
+                break;
+                }
                 else state = -1;
                 break;
             case 7: 
-            if(Character.isDigit(ch))
+                if(Character.isDigit(ch))
+                    break;
+                else if(ch == 'e'){
+                    state = 4;
+                    break;}
+                else 
+                state = -1;
                 break;
-            else if(ch == 'e'){
-                state = 4;
-                break;}
-            else 
-            state = -1;
-            break;
+            case 8: 
+                if(Character.isDigit(ch)){
+                    state = 9;
+                    break;
+                }
+                else 
+                    state = -1;
+                    break;
+            case 9:
+                if(Character.isDigit(ch))
+                    break;
+                else 
+                    state = -1;
+                    break;
             }
             
         }
 
-        System.out.printf("Stringa accetata: %s", (state == 1 || state == 6 || state == 7) ? "Si\n" : "No\n");
+        System.out.printf("Stringa accetata: %s", (state == 1 || state == 6 || state == 7 || state == 9) ? "Si\n" : "No\n");
     }
 }
