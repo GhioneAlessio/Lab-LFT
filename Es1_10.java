@@ -1,7 +1,8 @@
+
 //progetto ghione && frattarola
 import java.util.Scanner;
 
-public class Es1_9 {
+public class Es1_10 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Inserisci la stringa: ");
@@ -13,18 +14,23 @@ public class Es1_9 {
             switch (state) {
 
             case 0:
-                if (ch == '/'){
+                if (ch == '/') {
                     state = 1;
                     break;
-                }  
+                } else if (ch == 'a' || ch == '*')
+                    break;
                 else
                     state = -1;
                 break;
             case 1:
-                if (ch == '*'){
+                if (ch == '*') {
                     state = 2;
                     break;
-                }
+                } else if (ch == 'a') {
+                    state = 0;
+                    break;
+                } else if (ch == '/')
+                    break;
                 else
                     state = -1;
                 break;
@@ -39,21 +45,20 @@ public class Es1_9 {
                 break;
             case 3:
                 if (ch == '/') {
-                    state = 4;
+                    state = 1;
                     break;
                 } else if (ch == 'a') {
                     state = 2;
                     break;
-                } else if(ch == '*')
+                } else if (ch == '*')
                     break;
                 else
                     state = -1;
                 break;
-            case 4:
-                    state = -1;
+
             }
         }
-        System.out.printf("Stringa accetata: %s", (state == 4) ? "Si\n" : "No\n");
+        System.out.printf("Stringa accetata: %s", (state == 1 || state == 0) ? "Si\n" : "No\n");
 
     }
 }

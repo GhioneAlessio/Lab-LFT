@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class Es1_7 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Inserisci il tuo nome: ");
+        System.out.println("Inserisci il nome: ");
         String nome = scanner.nextLine();
         System.out.println("Inserisci la stringa da controllare: ");
         String sr = scanner.nextLine();
