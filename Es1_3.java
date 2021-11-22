@@ -9,40 +9,65 @@ public class Es1_3 {
             char ch = s.charAt(i);
             switch (state) {
             case 0:
-                if (Character.isDigit(ch))
-                    state = 1;
+                if (Character.isDigit(ch)){
+                    if(ch % 2 == 0){
+                        state = 1;
+                        break;
+                    }else{
+                        state = 2; 
+                        break;
+                    }
+                }
                 else 
                     state = -1;
                 break;
             case 1:
-                if (Character.isDigit(ch))
-                    state = 1;
-                else if (Character.isLetter(ch)){
-                     Character.toLowerCase(ch);
-                    if(97 <= ch && ch <= 107)
+                if (Character.isDigit(ch)){
+                    if(ch % 2 == 0){
+                        break;
+                    }else{
                         state = 2; 
+                        break;
+                    }
+                }
+                else if (Character.isLetter(ch)){
+                    ch = Character.toLowerCase(ch);
+                    if(97 <= ch && ch <= 107)
+                        state = 3; 
+                    else 
+                        state = -1;
+                }
+                else
+                    state = -1;
+                break;
+            case 2:
+                if (Character.isDigit(ch)){
+                    if(ch % 2 == 0){
+                        state = 1;;
+                    }else{
+                        break;
+                    }
+                }
+                else if (Character.isLetter(ch)){
+                    ch = Character.toLowerCase(ch);
+                    if(97 <= ch && ch <= 107)
+                        state = -1; 
                     else 
                         state = 3;
                 }
                 else
                     state = -1;
                 break;
-            case 2:
-                if (Character.isLetter(ch))
-                    state = 2;
-                else 
-                    state = -1;
-                break;
             case 3:
                 if (Character.isLetter(ch))
-                    state = 3;
+                    break;
                 else
                     state = -1;
                 break;
             }
             i+=1;
         }
-        return state == 2 || state == 3;
+        return state == 3;
     }
 
     public static void main(String[] args) {
