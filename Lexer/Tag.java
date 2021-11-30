@@ -1,4 +1,3 @@
-package Lexer;
 
 public class Tag {
     public final static int EOF = -1, NUM = 256, ID = 257, RELOP = 258, ASSIGN = 259, TO = 260, IF = 261, ELSE = 262,
