@@ -3,91 +3,91 @@ import java.util.Scanner;
 public class Es1_5{
 
     public static boolean scan(String s) {
-        String state = "0";
+        int state = 0;
         int i = 0;
-        while (state != "-1" && i < s.length()) {
+        while (state != -1 && i < s.length()) {
             char ch = s.charAt(i);
             if(Character.isLetter(ch))
                 ch = Character.toLowerCase(ch);
             switch (state) {
-            case "0":
+            case 0:
                 if (Character.isLetter(ch)) {
                     if (97 <= ch && ch <= 107)
-                        state = "A";
+                        state = 1;
                     else
-                        state = "B";
+                        state = 2;
                 } else
-                    state = "-1";
+                    state = -1;
                 break;
-            case "A": // corso A
+            case 1: // corso A
                 if (Character.isDigit(ch)) {
                     if (ch % 2 == 0)
-                        state = "AnP";
+                        state = 3;
                     else
-                        state = "AnD";
+                        state = 4;
                     break;
                 } else if (Character.isLetter(ch)) {
-                    state = "A";
+                    state = 1;
                     break;
                 }
-                state = "-1";
+                state = -1;
                 break;
-            case "B": // corso B
+            case 2: // corso B
                 if (Character.isDigit(ch)) {
                     if (ch % 2 == 0)
-                        state = "BnP";
+                        state = 5;
                     else
-                        state = "BnD";
+                        state = 6;
                     break;
                 } else if (Character.isLetter(ch)) {
-                    state = "B";
+                    state = 2;
                     break;
                 } else
-                    state = "-1";
+                    state = -1;
                 break;
-            case "AnP":
+            case 3: //anp
                 if (Character.isDigit(ch)) {
                     if (ch % 2 == 0)
-                        state = "AnP";
+                        state = 3;
                     else
-                        state = "AnD";
+                        state = 4;
                     break;
                 } else
-                    state = "-1";
-            case "AnD":
+                    state = -1;
+            case 4://and
                 if (Character.isDigit(ch)) {
                     if (ch % 2 == 0)
-                        state = "AnP";
+                        state = 3;
                     else
-                        state = "AnD";
+                        state = 4;
                     break;
                 } else
-                    state = "-1";
-            case "BnP":
+                    state = -1;
+            case 5://bnp
                 if (Character.isDigit(ch)) {
                     if (ch % 2 == 0)
-                        state = "BnP";
+                        state = 5;
                     else
-                        state = "BnD";
+                        state = 6;
                     break;
                 } else
-                    state = "-1";
+                    state = -1;
                 break;
-            case "BnD":
+            case 6:
                 if (Character.isDigit(ch)) {
                     if (ch % 2 == 0)
-                        state = "BnP";
+                        state = 5;
                     else
-                        state = "BnD";
+                        state = 6;
                     break;
                 } else
-                    state = "-1";
+                    state = -1;
                 break;
             }
 
             i += 1;
         }
-        return state == "AnP" || state == "BnD";
+        return state == 3 || state == 6;
     }
 
     public static void main(String[] args) {
