@@ -1,6 +1,5 @@
 import java.io.*;
 
-//feature del 47 
 
 public class Lexer {
 
