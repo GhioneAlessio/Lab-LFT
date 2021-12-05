@@ -60,6 +60,7 @@ public class Lexer {
                         if(peek == '*'){
                             readch(br);
                             if(peek == '/'){
+                                readch(br);
                                 return lexical_scan(br);
                             }
                         }
