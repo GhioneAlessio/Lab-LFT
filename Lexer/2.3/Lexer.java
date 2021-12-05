@@ -56,14 +56,19 @@ public class Lexer {
                     return lexical_scan(br);
                 }else if(peek == '*'){
                     readch(br); 
-                    while(peek != '\n' && peek != (char) -1){
+                    while(peek != (char) -1){
                         if(peek == '*'){
                             readch(br);
                             if(peek == '/'){
                                 readch(br);
                                 return lexical_scan(br);
                             }
-                        }
+                        }else if(peek == '\n'){
+                            line ++;
+                            readch(br);
+                            if(peek != '*')
+                                return null;
+                        }else 
                         readch(br);
                     }
                 }            
@@ -218,7 +223,7 @@ public class Lexer {
 
     public static void main(String[] args) {
         Lexer lex = new Lexer();
-        String path = "D:\\Unito\\Secondo Anno\\LFT\\Lab LFT\\Lexer\\2.3\\file.txt"; // il percorso del file da leggere
+        String path = "...path..."; // il percorso del file da leggere
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
             Token tok;
