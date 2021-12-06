@@ -66,8 +66,6 @@ public class Lexer {
                         }else if(peek == '\n'){
                             line ++;
                             readch(br);
-                            if(peek != '*')
-                                return null;
                         }else 
                         readch(br);
                     }
