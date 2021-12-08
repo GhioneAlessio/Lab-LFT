@@ -13,7 +13,7 @@ public class Parser {
 
     void move() {
         look = lex.lexical_scan(pbr);
-        error("\ntoken = " + look);
+        System.out.println("token = " + look);
     }
 
     void error(String s) {
