@@ -173,8 +173,8 @@ public class Lexer {
                     String num = "" + peek;
                     readch(br);
                     while (peek != '\t' && peek != '\n' && peek != '\r') {
-                        if (peek == ' ' || peek == (char) -1)
-                            return new NumberTok(num);
+                        if (!Character.isDigit(peek))
+                            return new NumberTok(num); 
                         else if (Character.isDigit(peek)) {
                             num = num + peek;
                             readch(br);
@@ -220,7 +220,7 @@ public class Lexer {
 
     public static void main(String[] args) {
         Lexer lex = new Lexer();
-        String path = "D:\\Unito\\Secondo Anno\\LFT\\Lab LFT\\Parser\\3.1\\dio.txt"; // il percorso del file da leggere
+        String path = "./test.txt"; // il percorso del file da leggere
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
             Token tok;

@@ -13,7 +13,7 @@ public class Parser {
 
     void move() {
         look = lex.lexical_scan(pbr);
-        error("\n token = " + look);
+        System.out.println("token = " + look);
     }
 
     void error(String s) {
@@ -28,26 +28,7 @@ public class Parser {
             error("Syntax error");
     }
 
-    public void start() {
-        // ... completare ...
-        switch (look.tag) {
-            case '(':
-                expr();
-                match(Tag.EOF);
-                break;
-            case Tag.NUM:
-                expr();
-                match(Tag.EOF);
-                break;
-            default:
-                error("Error in start() ");
-
-        }
-    }
-
-    
-
-    public void progr() {
+    public void prog() {
         switch (look.tag) {
             case Tag.ASSIGN:
                 statlist();
@@ -74,7 +55,8 @@ public class Parser {
                 match(Tag.EOF);
                 break;
             default:
-                error("Error in progr() ");
+                error("Error in prog() ");
+                
         }
     }
 
@@ -111,7 +93,7 @@ public class Parser {
 
     public void statlistp() {
         switch (look.tag) {
-            case ',':
+            case ';':
                 match(';');
                 stat();
                 statlistp();
@@ -158,7 +140,7 @@ public class Parser {
                 bexpr();
                 match(')');
                 stat();
-                match(Tag.END);
+                distat();
             case '{':
                 match('{');
                 statlist();
@@ -168,7 +150,20 @@ public class Parser {
                 error("Error in stat() ");
         }
     }
-
+    public void distat(){ //stato per la disambiguazione di stat()
+        switch(look.tag){
+            case Tag.END:
+                match(Tag.END);
+                break;
+            case Tag.ELSE:
+                match(Tag.ELSE);
+                stat();
+                match(Tag.END);
+                break;
+            default:
+                error("Error in stat() ");
+        }
+    }
     public void idlist() {
         switch (look.tag) {
             case Tag.ID:
@@ -285,6 +280,7 @@ public class Parser {
     public void exprlistp() {
         switch (look.tag) {
             case ',':
+                match(','); 
                 expr();
                 exprlistp();
                 break;
@@ -297,11 +293,11 @@ public class Parser {
 
     public static void main(String[] args) {
         Lexer lex = new Lexer();
-        String path = "D:\\Unito\\Secondo Anno\\LFT\\Lab LFT\\Parser\\3.2\\dio.txt"; // il percorso del file da leggere
+        String path = "/home/Alessio/Desktop/Uni/LFT/Lab/Parser/3.2/test.txt"; // il percorso del file da leggere
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
             Parser parser = new Parser(lex, br);
-            parser.start();
+            parser.prog();
             System.out.println("Input OK");
             br.close();
         } catch (IOException e) {
