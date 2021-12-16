@@ -68,8 +68,13 @@ public class Es1_8 {
                 if(Character.isDigit(ch)){
                     state = 6;
                     break;
-                }else 
-                state =-1; break;
+                }else if(ch== '.'){
+                    state = 8;
+                    break;
+                }
+                else
+                state =-1; 
+                break;
 
             case 6: 
                 if(Character.isDigit(ch))
