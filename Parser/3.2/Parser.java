@@ -141,6 +141,7 @@ public class Parser {
                 match(')');
                 stat();
                 distat();
+                break;
             case '{':
                 match('{');
                 statlist();
