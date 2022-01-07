@@ -93,10 +93,10 @@ public class Lexer {
                 readch(br);
                 if (peek == '=') {
                     peek = ' ';
-                    return Word.le;
+                    return Word.ge;
                 } else {
                     peek = ' ';
-                    return Word.lt;
+                    return Word.gt;
                 }
             case '=':
                 readch(br);
@@ -154,7 +154,7 @@ public class Lexer {
                             readch(br);
                         } 
                         
-                        return new NumberTok(num);
+                        return new NumberTok(Tag.NUM, Integer.parseInt(num));
                 } else {
                     System.err.println("Erroneous character: "
                             + peek);

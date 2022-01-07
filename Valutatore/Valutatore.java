@@ -1,3 +1,4 @@
+package Valutatore;
 import java.io.*;
 
 public class Valutatore {
@@ -142,7 +143,7 @@ public class Valutatore {
                 match(')');
                 return expr_val;
             case Tag.NUM:
-                fact_val = Integer.parseInt(((NumberTok) look).lexeme);
+                fact_val = (((NumberTok) look).lexeme);
                 match(Tag.NUM);
                 return fact_val;
             default:

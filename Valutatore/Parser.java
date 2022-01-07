@@ -1,3 +1,4 @@
+package Valutatore;
 import java.io.*;
 
 public class Parser {

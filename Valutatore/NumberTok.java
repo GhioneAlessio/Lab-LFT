@@ -1,9 +1,10 @@
+package Valutatore;
 public class NumberTok extends Token{
-    public String lexeme;
+    public int lexeme;
 
-    public NumberTok(String s) {
-        super(Tag.NUM);
-        lexeme = s;
+    public NumberTok(int tag, int n) {
+        super(tag);
+        lexeme = n;
     }
 
     public String toString() {

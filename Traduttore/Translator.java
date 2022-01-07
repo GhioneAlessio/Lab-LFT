@@ -1,4 +1,3 @@
-/*CONTROLLARE SE POSSO RIMUOVERE CIO' CHE C'E' SU TAG.ID DA READ*/
 
 import java.io.*;
 
@@ -33,7 +32,7 @@ public class Translator {
             error("Syntax error");
     }
 
-    /* COMPLETE */
+    
     public void prog() {
         int lnext_prog;
         switch (look.tag) {
@@ -111,7 +110,7 @@ public class Translator {
         }
     }
 
-    public void statlist(int l) { // Riceve il label da prog e non ne "crea" uno nuovo
+    public void statlist(int l) { 
         switch (look.tag) {
             case Tag.ASSIGN:
                 stat();
@@ -143,7 +142,7 @@ public class Translator {
     }
 
     public void statlistp() {
-        switch (look.tag) { // non riceve e non incrementa il label.
+        switch (look.tag) {
             case ';':
                 match(';');
                 stat();
@@ -158,7 +157,6 @@ public class Translator {
         }
     }
 
-    /* CIAO QUA VA TUTTO BEN ^ */
     public void stat() {
         switch (look.tag) {
             case Tag.ASSIGN:
@@ -227,7 +225,6 @@ public class Translator {
         }
     }
 
-    // DID
     private void distat(int labelFalse) {
         switch (look.tag) {
             case Tag.END:
@@ -251,11 +248,10 @@ public class Translator {
         }
     }
 
-    // DID
     private void idlist(int assign_read) {
         switch (look.tag) {
             case Tag.ID:
-                int id_addr = st.lookupAddress(((Word) look).lexeme);
+                int id_addr = st.lookupAddress(((Word)look).lexeme);
                 if (id_addr == -1) {
                     id_addr = count;
                     st.insert(((Word) look).lexeme, count++);
@@ -274,7 +270,6 @@ public class Translator {
 
     }
 
-    // DID
     public void idlistp(int assign_read) {
         switch (look.tag) {
             case ',':
@@ -310,7 +305,7 @@ public class Translator {
         }
     }
 
-    // DID
+
     private void expr() {
         switch (look.tag) {
             case '+':
@@ -359,7 +354,6 @@ public class Translator {
         }
     }
 
-    // DID
     public void exprlist(int sum_mul) {
         switch (look.tag) {
             case '+':
@@ -413,7 +407,6 @@ public class Translator {
         }
     }
 
-    // DID
     public void exprlistp(int sum_mul) {
         switch (look.tag) {
             case ',':
@@ -439,7 +432,6 @@ public class Translator {
         }
     }
 
-    // DID
     private void bexpr(int labelTrue) {
         switch (look.tag) {
             case Tag.RELOP:

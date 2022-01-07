@@ -1,6 +1,5 @@
 import java.io.*;
 
-
 public class Lexer {
 
     public static int line = 1;
@@ -47,30 +46,29 @@ public class Lexer {
                 peek = ' ';
                 return Token.mult;
             case '/':
-                readch(br); 
-                if(peek == '/'){
-                    while(peek != '\n' && peek != (char) -1){
+                readch(br);
+                if (peek == '/') {
+                    while (peek != '\n' && peek != (char) -1) {
                         readch(br);
                     }
                     return lexical_scan(br);
-                }else if(peek == '*'){
-                    readch(br); 
-                    while(peek != (char) -1){
-                        if(peek == '*'){
+                } else if (peek == '*') {
+                    readch(br);
+                    while (peek != (char) -1) {
+                        if (peek == '*') {
                             readch(br);
-                            if(peek == '/'){
+                            if (peek == '/') {
                                 readch(br);
                                 return lexical_scan(br);
                             }
-                        }else if(peek == '\n'){
-                            line ++;
+                        } else if (peek == '\n') {
+                            line++;
                             readch(br);
-                        }else 
-                        readch(br);
+                        } else
+                            readch(br);
                     }
-                }            
-                else
-                     return Token.div;
+                } else
+                    return Token.div;
             case ';':
                 peek = ' ';
                 return Token.semicolon;
@@ -116,10 +114,10 @@ public class Lexer {
                 readch(br);
                 if (peek == '=') {
                     peek = ' ';
-                    return Word.le;
+                    return Word.ge;
                 } else {
                     peek = ' ';
-                    return Word.lt;
+                    return Word.gt;
                 }
             case '=':
                 readch(br);
@@ -132,6 +130,25 @@ public class Lexer {
                     return null;
                 }
                 // ... gestire i casi di || < > <= >= == <> ... //
+            case '_':
+                String strID = "";
+                strID = strID + peek;
+                readch(br);
+                while (peek == '_') {
+                    strID = strID + peek;
+                    readch(br);
+                }
+                if (Character.isLetter(peek) || Character.isDigit(peek)) {
+                    while (Character.isLetter(peek) || Character.isDigit(peek) || peek == '_') {
+                        strID = strID + peek;
+                        readch(br);
+                    }
+                    return new Word(Tag.ID, strID);
+                } else {
+                    System.err.println("Erroneous character"
+                            + " after  : " + peek);
+                    return null;
+                }
 
             case (char) -1:
                 return new Token(Tag.EOF);
@@ -140,7 +157,7 @@ public class Lexer {
                 if (Character.isLetter(peek)) {
                     String sr = "" + peek;
                     readch(br);
-                    while (Character.isLetter(peek) || Character.isDigit(peek) || peek == '_') {
+                    while (Character.isLetter(peek)) {
                         sr = sr + peek;
                         readch(br);
                     }
@@ -172,43 +189,13 @@ public class Lexer {
                 else if (Character.isDigit(peek)) {
                     String num = "" + peek;
                     readch(br);
-                    while (peek != '\t' && peek != '\n' && peek != '\r') {
-                        if (!Character.isDigit(peek))
-                            return new NumberTok(num); 
-                        else if (Character.isDigit(peek)) {
-                            num = num + peek;
-                            readch(br);
-                        } else{
-                            System.err.println("Identifier can't start with number");
-                            return null;
-                        }
-                            
-                    }
-                    return new NumberTok(num);
-                } else if (peek == '_') {
-                    String sr = "" + peek;
-                    readch(br);
-                    while (peek == '_') {
-                        sr = sr + peek;
+                    while (Character.isDigit(peek)) {
+                        num = num + peek;
                         readch(br);
-                        if (peek == ' ' || peek == (char) -1) {
-                            System.err.println("Erroneous character: "
-                                    + sr);
-                            return null;
-                        }
                     }
-                    if (Character.isDigit(peek) || Character.isLetter(peek)) {
-                        while (Character.isLetter(peek) || Character.isDigit(peek) || peek == '_') {
-                            sr = sr + peek;
-                            readch(br);
-                        }
-                        return new Word(Tag.ID, sr);
-                    } else {
-                        System.err.println("Erroneous character: "
-                                + sr);
-                        return null;
-                    }
+                    return new NumberTok(Tag.NUM, Integer.parseInt(num));
                 }
+
                 else {
                     System.err.println("Erroneous character: "
                             + peek);
@@ -220,7 +207,9 @@ public class Lexer {
 
     public static void main(String[] args) {
         Lexer lex = new Lexer();
-        String path = "./test.txt"; // il percorso del file da leggere
+        String path = "C:\\Users\\marco\\Desktop\\Unito\\Slide_LFT\\Esercizi\\Lab-LFT\\5_1\\test.txt"; // il percorso
+                                                                                                       // del file da
+                                                                                                       // leggere
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
             Token tok;
