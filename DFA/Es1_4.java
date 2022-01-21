@@ -123,13 +123,13 @@ public class Es1_4 {
                     state = 7;
                     break;
                 }
-            case 6:// corso B
+            /*case 6:// corso B
                 if (Character.isLetter(ch)) {
                     break;
                 } else if (ch == ' ') {
                     state = 7;
                     break;
-                }
+                }*/
             case 7:
                 if (ch == ' ') {
                     break;
