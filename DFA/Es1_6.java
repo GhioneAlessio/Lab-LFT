@@ -100,7 +100,7 @@ public class Es1_6 {
                     if(97 <= ch && ch <= 107){
                         state = -1;
                     }else {
-                    state =8;
+                    state =7;
                     break;}
                 }else 
                 state = -1;
@@ -120,12 +120,17 @@ public class Es1_6 {
                     if(97 <= ch && ch <= 107){
                         state = -1;
                     }else {
-                    state =8;
+                    state =7;
                     break;}
                 }else 
                 state = -1;
                 break;
             }
+            case 7: 
+            if (Character.isLetter(ch))
+                break;
+            else {state=-1;
+            break;}
             i+=1;
     }
     return state == 7 || state == 8;
