@@ -111,6 +111,7 @@ public class Es1_6 {
                             state = 5;
                             break;
                         }
+
                     } else if (Character.isLetter(ch)) {
                         if (97 <= ch && ch <= 107) {
                             state = -1;
@@ -121,6 +122,7 @@ public class Es1_6 {
                     } else
                         state = -1;
                     break;
+
                 case 7:
                     if (Character.isLetter(ch))
                         break;
@@ -133,7 +135,7 @@ public class Es1_6 {
         }
         return state == 7;
     }
-
+    
     public static void main(String[] args) {
         String st;
         Scanner scanner = new Scanner(System.in);
