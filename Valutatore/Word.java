@@ -1,3 +1,4 @@
+package Valutatore;
 
 class Word extends Token {
     public String lexeme = "";

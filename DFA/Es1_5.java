@@ -12,10 +12,12 @@ public class Es1_5{
             switch (state) {
             case 0:
                 if (Character.isLetter(ch)) {
-                    if (97 <= ch && ch <= 107)
+                    if (65<= ch && ch <= 75)
                         state = 1;
-                    else
+                    else if (ch>=76 && ch<=90)
                         state = 2;
+                    else state = -1;
+                        break;
                 } else
                     state = -1;
                 break;

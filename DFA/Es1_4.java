@@ -123,13 +123,13 @@ public class Es1_4 {
                     state = 7;
                     break;
                 }
-            case 6:// corso B
+            /*case 6:// corso B
                 if (Character.isLetter(ch)) {
                     break;
                 } else if (ch == ' ') {
                     state = 7;
                     break;
-                }
+                }*/
             case 7:
                 if (ch == ' ') {
                     break;
@@ -156,7 +156,7 @@ public class Es1_4 {
             }
             i += 1;
         }
-        return state == 5 || state == 6 || state == 7 || state == 8;
+        return state == 5 || state == 7 || state == 8;
     }
 
     public static void main(String[] args) {
