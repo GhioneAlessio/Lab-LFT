@@ -1,5 +1,3 @@
-/*CONTROLLARE SE POSSO RIMUOVERE CIO' CHE C'E' SU TAG.ID DA READ*/
-
 import java.io.*;
 
 public class Translator {
@@ -33,7 +31,7 @@ public class Translator {
             error("Syntax error");
     }
 
-    /* COMPLETE */
+    //GUIDA ( <prog> ::= <statlist> EOF ) = { assign, print, read, while, if, { } 
     public void prog() {
         int lnext_prog;
         switch (look.tag) {
@@ -110,8 +108,8 @@ public class Translator {
                 break;
         }
     }
-
-    public void statlist(int l) { // Riceve il label da prog e non ne "crea" uno nuovo
+    //GUIDA ( <statlist> ::= <stat> <statlistp> ) = { assign, print, read, while, if, { }
+    public void statlist(int l) { 
         switch (look.tag) {
             case Tag.ASSIGN:
                 stat();
@@ -141,14 +139,15 @@ public class Translator {
                 error("Error in statlist() ");
         }
     }
-
+    //GUIDA ( <statlistp> ::= ; <stat> <statlistp> ) = { ; }
     public void statlistp() {
-        switch (look.tag) { // non riceve e non incrementa il label.
+        switch (look.tag) {
             case ';':
                 match(';');
                 stat();
                 statlistp();
                 break;
+    //GUIDA ( <statlistp> ::= ε ) = { EOF, } }
             case Tag.EOF:
                 break;
             case '}':
@@ -158,27 +157,30 @@ public class Translator {
         }
     }
 
-    /* CIAO QUA VA TUTTO BEN ^ */
     public void stat() {
         switch (look.tag) {
+            //GUIDA ( <stat> ::= assign <expr> to <idlist> ) = { assign }
             case Tag.ASSIGN:
                 match(Tag.ASSIGN);
-                expr();
+                int v = expr();
                 match(Tag.TO);
-                idlist(0);
+                idlist(0, v);
                 break;
+            //GUIDA ( <stat> ::= read ( <idlist> ) ) = { read }
             case Tag.READ:
                 match(Tag.READ);
                 match('(');
-                idlist(1);
+                idlist(1,-1);
                 match(')');
                 break;
+            //GUIDA ( <stat> ::= print ( <exprlist> ) ) = { print }
             case Tag.PRINT:
                 match(Tag.PRINT);
                 match('(');
                 exprlist(0);
                 match(')');
                 break;
+            //GUIDA ( <stat> ::= while ( <bexpr> ) <stat> ) = { while }
             case Tag.WHILE: {
                 int labelTrue = code.newLabel();
                 int labelFalse = code.newLabel();
@@ -201,6 +203,7 @@ public class Translator {
                 code.emitLabel(labelFalse);// Stampo il labelFalse che sarà segito dal resto del codice
                 break;
             }
+            //GUIDA ( <stat> ::= if ( <bexpr> ) <stat> A ) = { if }
             case Tag.IF: {
                 int labelTrue = code.newLabel();
                 int labelFalse = code.newLabel();
@@ -217,6 +220,7 @@ public class Translator {
                 distat(labelFalse);
                 break;
             }
+            //GUIDA ( <stat> ::= { <statlist> } ) = { { }	
             case '{':
                 match('{');
                 statlist(0);
@@ -227,13 +231,14 @@ public class Translator {
         }
     }
 
-    // DID
     private void distat(int labelFalse) {
         switch (look.tag) {
+            //GUIDA ( A ::= end ) = { end }
             case Tag.END:
                 match(Tag.END);
                 code.emitLabel(labelFalse);
                 break;
+            //GUIDA ( A ::= else <stat> end ) = { else }
             case Tag.ELSE:
                 int skipElseLabel = code.newLabel();
                 match(Tag.ELSE);
@@ -242,7 +247,6 @@ public class Translator {
                 stat();
                 match(Tag.END);
                 code.emitLabel(skipElseLabel); // segno la fine di else
-
                 break;
 
             default:
@@ -251,32 +255,35 @@ public class Translator {
         }
     }
 
-    // DID
-    private void idlist(int assign_read) {
+    
+    private int idlist(int assign_read, int value) {
+        int id_addr=0;
         switch (look.tag) {
+            //GUIDA ( <idlist> ::= ID <idlistp> ) = { ID }
             case Tag.ID:
-                int id_addr = st.lookupAddress(((Word) look).lexeme);
+                id_addr = st.lookupAddress(((Word) look).lexeme);
                 if (id_addr == -1) {
                     id_addr = count;
                     st.insert(((Word) look).lexeme, count++);
                 }
                 if (assign_read == 1) {
-                    code.emit(OpCode.invokestatic, 0); // 0 è per lettura
+                    code.emit(OpCode.invokestatic, 0); // 0 è per prendere un valore da input
                 }
                 code.emit(OpCode.istore, id_addr);
                 match(Tag.ID);
-                idlistp(assign_read);
+                idlistp(assign_read, value);
                 break;
             default:
                 error("Error in idlist()");
                 break;
         }
-
+        return id_addr;
     }
 
-    // DID
-    public void idlistp(int assign_read) {
+    
+    public void idlistp(int assign_read, int value) {
         switch (look.tag) {
+            //GUIDA ( <idlistp> ::= , ID <idlistp> ) = { , }
             case ',':
                 match(',');
                 int id_addr = st.lookupAddress(((Word) look).lexeme);
@@ -284,12 +291,15 @@ public class Translator {
                     id_addr = count;
                     st.insert(((Word) look).lexeme, count++);
                 }
-                match(Tag.ID);
                 if (assign_read == 1) {
                     code.emit(OpCode.invokestatic, 0);
                 }
+                else if (assign_read == 0) { //se o istore devo ricaricare l valore per salvarlo in una seconda variabile
+                    code.emit(OpCode.ldc, value);
+				}
                 code.emit(OpCode.istore, id_addr);
-                idlistp(assign_read);
+                match(Tag.ID);
+                idlistp(assign_read, value);
                 break;
             case ')':
                 break;
@@ -310,57 +320,57 @@ public class Translator {
         }
     }
 
-    // DID
-    private void expr() {
+    
+    private int expr() {
         switch (look.tag) {
+            //GUIDA ( <expr> ::= + ( <exprlist> ) ) = { + }
             case '+':
                 match('+');
                 match('(');
                 exprlist(1);
                 match(')');
-                break;
+                return -1;
+            //GUIDA ( <expr> ::= * ( <exprlist> ) ) = { * }
             case '*':
                 match('*');
                 match('(');
                 exprlist(2);
                 match(')');
-                break;
+                return -1;
+            //GUIDA ( <expr> ::= NUM ) = { NUM }
             case Tag.NUM:
-                code.emit(OpCode.ldc, (((NumberTok) look).lexeme));
+                int n = ((NumberTok)look).lexeme;
+                code.emit(OpCode.ldc, n);
                 match(Tag.NUM);
-                break;
+                return n;
+            //GUIDA ( <expr> ::= ID ) = { ID }
             case Tag.ID: // assegno ad id_addr il valore dell'indrizzo in cui è salvato l'ID
                 int id_addr = st.lookupAddress(((Word) look).lexeme);
-                /*  if (id_addr == -1) { // se non è mai stato salvato in un indirizzo avrà valore -1
-                    id_addr = count;
-                    st.insert(((Word) look).lexeme, count++); // assegno 0 al primo nuovo ID ed incremento di 1 ogni
-                                                              // volta
-
-                }
-                */
                 code.emit(OpCode.iload, id_addr); // stampo iload e l'indirizzo a cui è salvata la variabile
                 match(Tag.ID);
-                break;
+                return -1;
+            //GUIDA ( <expr> ::= - <expr> <expr> ) = { - }
             case '-':
                 match('-');
                 expr();
                 expr();
                 code.emit(OpCode.isub);
-                break;
+                return -1;
+            //GUIDA ( <expr> ::= / <expr> <expr> ) = { / }
             case '/':
                 match('/');
                 expr();
                 expr();
                 code.emit(OpCode.idiv);
-                break;
+                return -1;
             default:
                 error("Error in expr() ");
-                break;
+                return -1;
         }
     }
 
-    // DID
     public void exprlist(int sum_mul) {
+        //GUIDA ( <exprlist> ::= <expr> <exprlistp> ) = { +, -, *, /, NUM, ID }
         switch (look.tag) {
             case '+':
                 expr();
@@ -413,9 +423,9 @@ public class Translator {
         }
     }
 
-    // DID
     public void exprlistp(int sum_mul) {
         switch (look.tag) {
+            //GUIDA ( <exprlistp> ::= , <expr> <exprlistp> ) = { , }
             case ',':
                 match(',');
                 expr();
@@ -432,6 +442,7 @@ public class Translator {
                 }
                 exprlistp(sum_mul);
                 break;
+            //GUIDA ( <exprlistp> ::= ε ) = { ) }
             case ')':
                 break;
             default:
@@ -439,9 +450,9 @@ public class Translator {
         }
     }
 
-    // DID
     private void bexpr(int labelTrue) {
-        switch (look.tag) {
+        switch (look.tag){
+            //GUIDA ( <bexpr> ::= RELOP <expr> <expr> ) = { RELOP }
             case Tag.RELOP:
                 String tmp = ((Word) look).lexeme;// != < > <= >= etc
                 match(Tag.RELOP);
